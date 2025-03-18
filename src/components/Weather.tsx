@@ -9,13 +9,18 @@ import snow_icon from '../assets/snow.png';
 import humidity_icon from '../assets/humidity.png';
 import wind_icon from '../assets/wind.png';
 
-
-
 const Weather = () => {
-  const [weatherData, setWeatherData] = useState(false);
-  const [city, setCity] = useState("New York");
+  const [weatherData, setWeatherData] = useState<{
+    humidity: number;
+    windSpeed: number;
+    temperature: number;
+    location: string;
+    icon: string;
+  } | null>(null);
+  
+  const [city, setCity] = useState<string>("London");
 
-  const allIcons = {
+  const allIcons: Record<string, string> = {
     "01d": clear_icon,
     "01n": clear_icon,
     "02d": cloud_icon,
@@ -32,16 +37,15 @@ const Weather = () => {
     "13n": snow_icon
   };
 
-  const search = async (city) => {
+  const search = async (city: string) => {
     try {
-      const url = https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${import.meta.env.VITE_APP_ID};
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${import.meta.env.VITE_APP_ID}`;
 
       const response = await fetch(url);
       const data = await response.json();
-      console.log(data);
 
-      if (data.cod === 200) {
-        const icon = allIcons[data.weather[0].icon] || clear_icon;
+      
+        const icon = allIcons[data.weather[0]?.icon] || clear_icon;
         setWeatherData({
           humidity: data.main.humidity,
           windSpeed: data.wind.speed,
@@ -49,12 +53,13 @@ const Weather = () => {
           location: data.name,
           icon: icon
         });
-      } else {
+     
         console.error("Cidade não encontrada");
         setWeatherData(null);
-      }
+      
     } catch (error) {
       console.error("Erro ao buscar os dados:", error);
+      setWeatherData(null);
     }
   };
 
@@ -78,33 +83,28 @@ const Weather = () => {
           onClick={() => search(city)}
         />
       </div>
-      <img src={clear_icon} alt="" className='weather-icon'/>
-      <p className='temeprature'>{weatherData.temperature} ºC</p>
-      <p className='location'>{weatherData.location}</p>
-      <div className='weather-data'>
-        <div className="col">
-          <img src={humidity_icon} alt="" />
-          <div>
-            <p> {weatherData.humidity}</p>
-            <span>Humidity</span>
-          </div>
-        </div>
-        <div className="col">
-          <img src={wind_icon} alt="" />
-          <div>
-            <p> {weatherData.windSpeed} Km/h</p>
-            <span>Wind Speed</span>
-          </div>
-        </div>   
-      </div>
 
       {weatherData ? (
         <div className='weather-info'>
           <h2>{weatherData.location}</h2>
           <img src={weatherData.icon} alt="Weather Icon" className="weather-icon" />
-          <p>Temp: {weatherData.temperature}°C</p>
-          <p>Humidity: {weatherData.humidity}%</p>
-          <p>Wind Speed: {weatherData.windSpeed} m/s</p>
+          <p className='temperature'>{weatherData.temperature} ºC</p>
+          <div className='weather-data'>
+            <div className="col">
+              <img src={humidity_icon} alt="Humidity Icon" />
+              <div>
+                <p>{weatherData.humidity}%</p>
+                <span>Humidity</span>
+              </div>
+            </div>
+            <div className="col">
+              <img src={wind_icon} alt="Wind Icon" />
+              <div>
+                <p>{weatherData.windSpeed} Km/h</p>
+                <span>Wind Speed</span>
+              </div>
+            </div>
+          </div>
         </div>
       ) : (
         <p className="error-message">Cidade não encontrada</p>
@@ -114,4 +114,3 @@ const Weather = () => {
 };
 
 export default Weather;
-
