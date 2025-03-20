@@ -8,22 +8,35 @@ const Google = () => {
 
     return (
 
-<div className='map'>
-    {isLoaded ? (
-        <GoogleMap
-        mapContainerStyle={{width: '50%', height: '100%'}}
-        center={{
-            lat: 41.5454, 
-            lng: -8.4265,
-      }}
-      zoom={14}
-    ></GoogleMap>
-  ) : (
-    <></>
-)}
-</div>
+      <div className="map-container">
+      {/* Container do Mapa */}
+      <div className="map">
+        {isLoaded ? (
+          <GoogleMap
+            mapContainerStyle={{ width: "100%", height: "100%" }}
+            center={{
+              lat: 41.5454,
+              lng: -8.4265,
+            }}
+            zoom={14}
+          />
+        ) : (
+          <p>Carregando mapa...</p>
+        )}
+      </div>
 
-    );
+      {/* Painel de Informações ao lado */}
+      <div className="info-panel">
+        <h2>Informações do Local</h2>
+        <p>Detalhes sobre a localização mostrada no mapa:</p>
+        <ul>
+          <li><strong>Latitude:</strong> 41.5454</li>
+          <li><strong>Longitude:</strong> -8.4265</li>
+          <li><strong>Zoom:</strong> 14</li>
+        </ul>
+      </div>
+    </div>
+  );
 };
 
 export default Google;
