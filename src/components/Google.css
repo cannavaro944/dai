@@ -15,10 +15,9 @@
   /* Estilo do Painel de Informações */
   .info-panel {
     flex: 1; /* Ocupa metade da largura do container */
-    padding: 20px;
+    padding:20px;
     background: black;
     border-left: 2px solid #ccc;
     display: flex;
     flex-direction: column;
-    justify-content: center;
   }
