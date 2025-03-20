@@ -11,7 +11,7 @@ const Google = () => {
 <div className='map'>
     {isLoaded ? (
         <GoogleMap
-        mapContainerStyle={{width: '100%', height: '100%'}}
+        mapContainerStyle={{width: '50%', height: '100%'}}
         center={{
             lat: 41.5454, 
             lng: -8.4265,
