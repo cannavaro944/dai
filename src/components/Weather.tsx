@@ -1,55 +1,81 @@
-import React, { useEffect, useState } from 'react';
-import SearchIcon from '../assets/search_icon.png';
-const Weather = () => {
+import { useState } from "react";
 
-  const[weatherData, setWeatherData]= useState(false);
-  const allIcons ={
-"01d": clear_icon,
-"01n": clear_icon,
-"02d": cloud_icon,
-"02n": cloud_icon,
-"03d": cloud_icon,
-"03n": cloud _icon,
-"04d": drizzle_icon,
-"04n": drizzle_icon,
-"09d": rain_icon,
-"09n": rain_icon,
-"10d": rain_icon,
-"10n": rain_icon,
-"13d": snow_icon,
-"13n": snow icon,
-  }
-  const search= async (city) =>{
-    try{
-      const url = 'https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${import.meta.env.VITE_APP_ID}'
+const API_KEY = "ff5b8a7c222968914ecb01d57ac093c9";  
 
-
-      const response = await fetch(url);
-      const data = await response.json();
-      console.log(data);
-      const icon = allIcons[data.weather[0].icon] || clear_icon;
-      setWeatherData({
-        humidity: data.main.humidity,
-        windSpeed: data.wind.speed,
-        temperature: Math.floor(data.main.temp),
-        location: data.name,
-        icon: icon
-      })
-    } catch(error){
-
-    }
-    useEffect(()=>{
-      search("Braga");
-    }, [])
-  }
-  return (
-    <div className='weather'>
-      <div className='search-bar'>
-        <input type ="text" aria-placeholder='Search'/>
-        <img src={SearchIcon} alt="" className="search-icon" />
-      </div>
-    </div>
-  )
+interface ClimaDados {
+  name: string;
+  main: { temp: number };
+  weather: { description: string }[];
 }
 
-export default Weather
+const Weather = () => {
+  const [cidade, setCidade] = useState<string>("");
+  const [dadosClima, setDadosClima] = useState<ClimaDados | null>(null);
+  const [erro, setErro] = useState<string | null>(null);
+
+
+  const buscarClima = async () => {
+    console.log("Valor de cidade antes da busca:", cidade); // <-- Verifica se a cidade foi atualizada corretamente
+    if (!cidade.trim()) {
+      setErro("Digite uma cidade válida!");
+      return;
+    }
+  
+    try {
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${cidade}&appid=${API_KEY}&units=metric&lang=pt`;
+      console.log("URL da API:", url); // <-- Verifica se a URL contém a cidade certa
+  
+      const resposta = await fetch(url);
+  
+      if (!resposta.ok) {
+        throw new Error("Cidade não encontrada!");
+      }
+  
+      const dados: ClimaDados = await resposta.json();
+      setDadosClima(dados);
+      setErro(null);
+    } catch (error) {
+      setErro(error instanceof Error ? error.message : "Erro ao buscar dados!");
+      setDadosClima(null);
+    }
+  };
+  
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCidade(e.target.value);
+    console.log("Nova cidade digitada:", e.target.value); // <-- Verificar no console
+  };
+  
+  return (
+    <div className="absolute top-135 ml-0 p-6 max-w-md mx-auto bg-white shadow-lg rounded-xl">
+      <h2 className="text-2xl font-bold mb-4 text-center">Consulta de Clima</h2>
+
+      <input
+      type="text"
+      placeholder="Digite a cidade..."
+      value={cidade}
+      onChange={handleInputChange} // <- Agora está usando a função correta
+      className="p-2 border rounded w-full"
+    />
+    
+      <button
+        onClick={buscarClima} // <- Chamamos a função ao clicar
+        className="mt-2 p-2 bg-blue-500 text-white rounded w-full hover:bg-blue-600 transition"
+      >
+        Buscar
+      </button>
+
+      {erro && <p className="text-red-500 mt-2 text-center">{erro}</p>}
+
+      {dadosClima && (
+        <div className="mt-4 p-4 border rounded text-center">
+          <h3 className="text-lg font-semibold">{dadosClima.name}</h3>
+          <p className="text-xl">🌡 {dadosClima.main.temp}°C</p>
+          <p>🌤 {dadosClima.weather[0].description}</p>
+        </div>
+      )}
+    </div>
+  
+  );
+};
+
+export default Weather;
