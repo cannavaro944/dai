@@ -2,10 +2,11 @@ import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
+/*
 import { cn } from "@/lib/utils";
 import Image from "../assets/x.png";
 import Image1 from "../assets/locationarrow.png";
-
+*/
 
 
 import './Google.css';
@@ -46,7 +47,7 @@ const Google = () => {
             <Input type="text" placeholder="Destination" />
           </div>
           <div className="flex gap-4">
-            <Button className="bg-pink-500 hover:bg-pink-600 text-white">
+            <Button className="bg-blue-500 hover:bg-blue-600 text-white">
               Calculate Route
             </Button>
             <button
@@ -63,24 +64,11 @@ const Google = () => {
               onClick={() => alert(123)}
               className="p-2 rounded-full bg-gray-200 hover:bg-gray-300"
             >
-
             </button>
           </div>
         </div>
       </Card>
     </div>
-      
-
-      {/* Painel de Informações ao lado */}
-      <div className="info-panel">
-        <h2>Informações do Local</h2>
-        <p>Detalhes sobre a localização mostrada no mapa:</p>
-        <ul>
-          <li><strong>Latitude:</strong> 41.5454</li>
-          <li><strong>Longitude:</strong> -8.4265</li>
-          <li><strong>Zoom:</strong> 14</li>
-        </ul>
-      </div>
     </div>
   );
 };
