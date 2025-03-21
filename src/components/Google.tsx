@@ -1,4 +1,4 @@
-import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
+import { GoogleMap, useJsApiLoader } from '@react-google-maps/api'; 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -7,8 +7,6 @@ import { cn } from "@/lib/utils";
 import Image from "../assets/x.png";
 import Image1 from "../assets/locationarrow.png";
 */
-
-
 import './Google.css';
 
 const Google = () => {
